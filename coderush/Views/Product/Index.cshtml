@@ -108,7 +108,7 @@
                         { field: "DefaultBuyingPrice", headerText: 'Buying Price', editType: "numericedit", format: "{0:n2}" },
                         { field: "DefaultSellingPrice", headerText: 'Selling Price', editType: "numericedit", format: "{0:n2}" },
                         { field: "BranchId", headerText: 'Branch', foreignKeyField: "BranchId", foreignKeyValue: "BranchName", dataSource: dataManagerBranch },
-                        { field: "CurrencyId", headerText: 'Currency', allowEditing: false, foreignKeyField: "CurrencyId", foreignKeyValue: "CurrencyCode", dataSource: dataManagerCurrency },
+                        { field: "CurrencyId", headerText: 'Currency', allowEditing: true, foreignKeyField: "CurrencyId", foreignKeyValue: "CurrencyCode", dataSource: dataManagerCurrency },
                     ],
                     actionComplete: "complete",
                 });

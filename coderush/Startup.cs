@@ -12,6 +12,7 @@ using coderush.Data;
 using coderush.Models;
 using coderush.Services;
 using Newtonsoft.Json.Serialization;
+using Microsoft.Data.SqlClient;
 
 namespace coderush
 {
@@ -27,9 +28,18 @@ namespace coderush
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            var connectionString = Configuration.GetConnectionString("MySQLConnection");
 
+
+           // var conStrBuilder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("MySQLConnection"));
+           // conStrBuilder.Password = Configuration["DbPassword"];
+
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            });
+                
             // Get Identity Default Options
             IConfigurationSection identityDefaultOptionsConfigurationSection = Configuration.GetSection("IdentityDefaultOptions");
 
@@ -58,15 +68,15 @@ namespace coderush
                 // email confirmation require
                 options.SignIn.RequireConfirmedEmail = identityDefaultOptions.SignInRequireConfirmedEmail;
             })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
             // cookie settings
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = identityDefaultOptions.CookieHttpOnly;
-                options.Cookie.Expiration = TimeSpan.FromDays(identityDefaultOptions.CookieExpiration);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(identityDefaultOptions.CookieExpiration);
                 options.LoginPath = identityDefaultOptions.LoginPath; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
                 options.LogoutPath = identityDefaultOptions.LogoutPath; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
                 options.AccessDeniedPath = identityDefaultOptions.AccessDeniedPath; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
@@ -90,17 +100,15 @@ namespace coderush
             services.AddTransient<IRoles, Roles>();
 
             services.AddTransient<IFunctional, Functional>();
-            
-            services.AddMvc()
-            .AddJsonOptions(options =>
+
+            services.AddMvc(options => options.EnableEndpointRouting = false);
+
+            services.AddControllersWithViews()
+            .AddNewtonsoftJson(options =>
             {
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                //pascal case json
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-                
             });
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
