@@ -28,14 +28,44 @@ namespace coderush.Controllers.Api
             _numberSequence = numberSequence;
         }
 
-        // GET: api/PurchaseOrder
+        // GET: api/GetOpenPurchaseOrders
         [HttpGet]
-        public async Task<IActionResult> GetPurchaseOrder()
+        public async Task<IActionResult> GetPurchaseOrderAsync()
         {
-            List<PurchaseOrder> Items = await _context.PurchaseOrder.ToListAsync();
+            //List<PurchaseOrder> Items = await _context.PurchaseOrder.ToListAsync();
+            List<PurchaseOrder> Items = await _context.PurchaseOrder.Where(c => !_context.GoodsReceivedNote.Select(b => b.PurchaseOrderId).Contains(c.PurchaseOrderId)).ToListAsync();
+
+            //var Items = (from po in _context.PurchaseOrder
+            //            join rn in _context.GoodsReceivedNote on po.PurchaseOrderId equals rn.PurchaseOrderId into gj
+            //            from subpet in gj.DefaultIfEmpty()
+            //            select new
+            //            {
+            //                po.PurchaseOrderId,
+            //                po.PurchaseOrderName,
+            //                po.BranchId,
+            //                po.SupplierId,
+            //                po.OrderDate,
+            //                po.DeliveryDate,
+            //                po.PurchaseTypeId,
+            //                po.Remarks,
+            //                po.Total,
+            //                subpet.GoodsReceivedNoteId
+            //            }).Where(subpet => subpet.GoodsReceivedNoteId == null);
+
+
             int Count = Items.Count();
             return Ok(new { Items, Count });
         }
+
+
+        // GET: api/PurchaseOrder
+        //[HttpGet]
+        //public async Task<IActionResult> GetPurchaseOrder()
+        //{
+        //    List<PurchaseOrder> Items = await _context.PurchaseOrder.ToListAsync();
+        //    int Count = Items.Count();
+        //    return Ok(new { Items, Count });
+        //}
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetNotReceivedYet()
@@ -90,13 +120,14 @@ namespace coderush.Controllers.Api
                     lines = _context.PurchaseOrderLine.Where(x => x.PurchaseOrderId.Equals(purchaseOrderId)).ToList();
 
                     //update master data by its lines
-                    purchaseOrder.Amount = lines.Sum(x => x.Amount);
-                    purchaseOrder.SubTotal = lines.Sum(x => x.SubTotal);
+                    //purchaseOrder.Amount = lines.Sum(x => x.Amount);
+                    //purchaseOrder.SubTotal = lines.Sum(x => x.SubTotal);
 
-                    purchaseOrder.Discount = lines.Sum(x => x.DiscountAmount);
-                    purchaseOrder.Tax = lines.Sum(x => x.TaxAmount);
+                    //purchaseOrder.Discount = lines.Sum(x => x.DiscountAmount);
+                    //purchaseOrder.Tax = lines.Sum(x => x.TaxAmount);
 
-                    purchaseOrder.Total = purchaseOrder.Freight + lines.Sum(x => x.Total);
+                    // purchaseOrder.Total = purchaseOrder.Freight + lines.Sum(x => x.Total);
+                    purchaseOrder.Total =  lines.Sum(x => x.Total);
 
                     _context.Update(purchaseOrder);
 

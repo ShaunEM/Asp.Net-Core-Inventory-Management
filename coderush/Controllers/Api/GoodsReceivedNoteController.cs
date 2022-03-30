@@ -65,13 +65,35 @@ namespace coderush.Controllers.Api
         }
 
         [HttpPost("[action]")]
-        public IActionResult Insert([FromBody]CrudViewModel<GoodsReceivedNote> payload)
+        public async Task<IActionResult> InsertAsync([FromBody]CrudViewModel<GoodsReceivedNote> payload)
         {
             GoodsReceivedNote goodsReceivedNote = payload.value;
             goodsReceivedNote.GoodsReceivedNoteName = _numberSequence.GetNumberSequence("GRN");
+
             _context.GoodsReceivedNote.Add(goodsReceivedNote);
             _context.SaveChanges();
+            PurchaseOrder purchaseOrder = await _context.PurchaseOrder.Where(x => x.PurchaseOrderId.Equals(goodsReceivedNote.PurchaseOrderId)).SingleOrDefaultAsync();
+
+            // Get purchase order parts
+            List<PurchaseOrderLine> purchaseOrderLines = await _context.PurchaseOrderLine.Where(x => x.PurchaseOrderId.Equals(goodsReceivedNote.PurchaseOrderId)).ToListAsync();
+            foreach(PurchaseOrderLine purchaseOrderLine in purchaseOrderLines)
+            {
+                // Add parts to inventory
+                _context.PartInventory.Add(new PartInventory()
+                {
+                    BranchAreaId = goodsReceivedNote.BranchAreaId,
+                    PartId = purchaseOrderLine.PartId,
+                    QTY = purchaseOrderLine.QTY,
+                    InventoryTypeId = _context.InventoryType.Where(x => x.InventoryTypeName == "GoodsReceivedNote").Select(c => c.InventoryTypeId).SingleOrDefault(),
+                    TableId = goodsReceivedNote.GoodsReceivedNoteId,
+                    DateTime = goodsReceivedNote.GRNDate
+                });
+            }
+            _context.SaveChanges();
+
+
             return Ok(goodsReceivedNote);
+
         }
 
         [HttpPost("[action]")]
@@ -86,8 +108,9 @@ namespace coderush.Controllers.Api
         [HttpPost("[action]")]
         public IActionResult Remove([FromBody]CrudViewModel<GoodsReceivedNote> payload)
         {
+            int id = Convert.ToInt32(payload.key);
             GoodsReceivedNote goodsReceivedNote = _context.GoodsReceivedNote
-                .Where(x => x.GoodsReceivedNoteId == (int)payload.key)
+                .Where(x => x.GoodsReceivedNoteId == id)
                 .FirstOrDefault();
             _context.GoodsReceivedNote.Remove(goodsReceivedNote);
             _context.SaveChanges();

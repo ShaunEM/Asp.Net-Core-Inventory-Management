@@ -103,6 +103,10 @@ namespace coderush
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
 
+
+
+
+
             services.AddControllersWithViews()
             .AddNewtonsoftJson(options =>
             {

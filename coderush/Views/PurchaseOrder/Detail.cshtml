@@ -28,12 +28,6 @@
                     <div class="row">
                         <dl class="dl-horizontal">
                             <dt>
-                                @Html.DisplayNameFor(model => model.PurchaseOrderId)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.PurchaseOrderId)
-                            </dd>
-                            <dt>
                                 @Html.DisplayNameFor(model => model.PurchaseOrderName)
                             </dt>
                             <dd>
@@ -43,13 +37,13 @@
                                 @Html.DisplayNameFor(model => model.BranchId)
                             </dt>
                             <dd>
-                                <input type="text" id="BranchId" />
+                                @Html.TextBoxFor(model => model.BranchId, new { @readonly = "readonly" })
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.VendorId)
+                                @Html.DisplayNameFor(model => model.SupplierId)
                             </dt>
                             <dd>
-                                <input type="text" id="VendorId" />
+                                @Html.TextBoxFor(model => model.SupplierId, new { @readonly = "SupplierId" })
                             </dd>
                             <dt>
                                 @Html.DisplayNameFor(model => model.OrderDate)
@@ -64,19 +58,23 @@
                                 @Html.DisplayFor(model => model.DeliveryDate)
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.CurrencyId)
-                            </dt>
-                            <dd>
-                                <input type="text" id="CurrencyId" />
-                            </dd>
-                            <dt>
                                 @Html.DisplayNameFor(model => model.PurchaseTypeId)
                             </dt>
                             <dd>
-                                <input type="text" id="PurchaseTypeId" />
+                                @Html.TextBoxFor(model => model.PurchaseTypeId, new { @readonly = "PurchaseTypeId" })
                             </dd>
-
-
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Remarks)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Remarks)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Total)
+                            </dt>
+                            <dd>
+                                @Html.TextBoxFor(model => model.Total, new { @readonly = "readonly" })
+                            </dd>
                         </dl>
                     </div>
                     
@@ -91,57 +89,6 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div id="Grid"></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-8">
-
-                    </div>
-                    <div class="col-lg-4">
-                        <dl class="dl-horizontal">
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Remarks)
-                            </dt>
-                            <dd>
-                                @Html.DisplayFor(model => model.Remarks)
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Amount)
-                            </dt>
-                            <dd>
-                                <label id="Amount" name="Amount">@Model.Amount</label>
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Discount)
-                            </dt>
-                            <dd>
-                                <label id="Discount" name="Discount">@Model.Discount</label>
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.SubTotal)
-                            </dt>
-                            <dd>
-                                <label id="SubTotal" name="SubTotal">@Model.SubTotal</label>
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Tax)
-                            </dt>
-                            <dd>
-                                <label id="Tax" name="Tax">@Model.Tax</label>
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Freight)
-                            </dt>
-                            <dd>
-                                <label id="Freight" name="Freight">@Model.Freight</label>
-                            </dd>
-                            <dt>
-                                @Html.DisplayNameFor(model => model.Total)
-                            </dt>
-                            <dd>
-                                <label id="Total" name="Total">@Model.Total</label>
-                            </dd>
-                        </dl>
                     </div>
                 </div>
             </div>
@@ -170,8 +117,8 @@
                 offline: true,
             });
 
-            var dataManagerProduct = ej.DataManager({
-                url: "/api/Product",
+            var dataManagerPart = ej.DataManager({
+                url: "/api/Part",
                 adaptor: new ej.WebApiAdaptor()
             });
 
@@ -185,8 +132,8 @@
                 adaptor: new ej.WebApiAdaptor()
             });
 
-            var dataManagerVendor = ej.DataManager({
-                url: "/api/Vendor",
+            var dataManagerSupplier = ej.DataManager({
+                url: "/api/Supplier",
                 adaptor: new ej.WebApiAdaptor()
             });
 
@@ -207,17 +154,10 @@
                 enabled: false,
             });
 
-            $('#VendorId').ejDropDownList({
-                dataSource: dataManagerVendor,
-                fields: { id: 'VendorId', text: 'VendorName', value: 'VendorId' },
-                value: @Model.VendorId,
-                enabled: false,
-            });
-
-            $('#CurrencyId').ejDropDownList({
-                dataSource: dataManagerCurrency,
-                 fields: { id: 'CurrencyId', text: 'CurrencyName', value: 'CurrencyId' },
-                value: @Model.CurrencyId,
+            $('#SupplierId').ejDropDownList({
+                dataSource: dataManagerSupplier,
+                fields: { id: 'SupplierId', text: 'SupplierName', value: 'SupplierId' },
+                value: @Model.SupplierId,
                 enabled: false,
             });
 
@@ -229,43 +169,37 @@
             });
 
             dataManager.ready.done(function (e) { 
-            $("#Grid").ejGrid({
-                dataSource: ej.DataManager({
-                    json: e.result,
-                    adaptor: new ej.remoteSaveAdaptor(),
-                    insertUrl: "/api/PurchaseOrderLine/Insert",
-                    updateUrl: "/api/PurchaseOrderLine/Update",
-                    removeUrl: "/api/PurchaseOrderLine/Remove",
-                }),
-                toolbarSettings: {
-                    showToolbar: true,
-                    toolbarItems: ["add", "edit", "delete", "update", "cancel"]
-                },
-                editSettings: {
-                    allowEditing: true,
-                    allowAdding: true,
-                    allowDeleting: true,
-                    showDeleteConfirmDialog: true,
+                $("#Grid").ejGrid({
+                    dataSource: ej.DataManager({
+                        json: e.result,
+                        adaptor: new ej.remoteSaveAdaptor(),
+                        insertUrl: "/api/PurchaseOrderLine/Insert",
+                        updateUrl: "/api/PurchaseOrderLine/Update",
+                        removeUrl: "/api/PurchaseOrderLine/Remove",
+                    }),
+                    toolbarSettings: {
+                        showToolbar: true,
+                        toolbarItems: ["add", "edit", "delete", "update", "cancel"]
+                    },
+                    editSettings: {
+                        allowEditing: true,
+                        allowAdding: true,
+                        allowDeleting: true,
+                        showDeleteConfirmDialog: true,
 
-                },
-                allowPaging: true,
-                columns: [
-                    { field: "PurchaseOrderLineId", headerText: 'Line Id', isPrimaryKey: true, isIdentity: true, visible: false },
-                    { field: "PurchaseOrderId", headerText: 'PO#', defaultValue: @Model.PurchaseOrderId, foreignKeyField: "PurchaseOrderId", foreignKeyValue: "PurchaseOrderName", dataSource: dataManagerPurchaseOrder, visible: false },
-                    { field: "ProductId", headerText: 'Product', foreignKeyField: "ProductId", foreignKeyValue: "ProductName", dataSource: dataManagerProduct },
-                    { field: "Description", headerText: 'Description' },
-                    { field: "Quantity", headerText: 'Qty', defaultValue: 1, editType: "numericedit", format: "{0:n2}" },
-                    { field: "Price", headerText: 'Price', defaultValue: 0, editType: "numericedit", format: "{0:n2}" },
-                    { field: "Amount", headerText: 'Amount', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
-                    { field: "DiscountPercentage", headerText: 'Disc %', defaultValue: 0, editType: "numericedit", format: "{0:n2}" },
-                    { field: "DiscountAmount", headerText: 'Disc Amt', defaultValue: 0, visible: false, editType: "numericedit", format: "{0:n2}" },
-                    { field: "SubTotal", headerText: 'SubTotal', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
-                    { field: "TaxPercentage", headerText: 'Tax %', defaultValue: 0, editType: "numericedit", format: "{0:n2}" },
-                    { field: "TaxAmount", headerText: 'Tax Amt', defaultValue: 0, visible: false, editType: "numericedit", format: "{0:n2}" },
-                    { field: "Total", headerText: 'Total', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
-                ],
-                actionComplete: "complete",
-            });
+                    },
+                    allowPaging: true,
+                    columns: [
+                        { field: "PurchaseOrderLineId", headerText: 'Line Id', isPrimaryKey: true, isIdentity: true, visible: false },
+                        { field: "PurchaseOrderId", headerText: 'PO#', defaultValue: @Model.PurchaseOrderId, foreignKeyField: "PurchaseOrderId", foreignKeyValue: "PurchaseOrderName", dataSource: dataManagerPurchaseOrder, visible: false },
+                        { field: "PartId", headerText: 'Part', foreignKeyField: "PartId", foreignKeyValue: "PartName", dataSource: dataManagerPart },
+                        { field: "Description", headerText: 'Description' },
+                        { field: "Quantity", headerText: 'Qty', defaultValue: 1, editType: "numericedit", },
+                        { field: "Price", headerText: 'Price', defaultValue: 0, editType: "numericedit", format: "{0:n2}", editParams: { decimalPlaces: 2 } },
+                        { field: "Total", headerText: 'Total', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
+                    ],
+                    actionComplete: "complete",
+                });
             });
 
 
@@ -286,12 +220,7 @@
                 type: 'GET',
                 url: '/api/PurchaseOrder/GetById/' + purchaseOrderId,
                 success: function (data) {
-                    $('#Amount').text(data.Amount);
-                    $('#SubTotal').text(data.SubTotal);
-                    $('#Discount').text(data.Discount);
-                    $('#Tax').text(data.Tax);
-                    $('#Freight').text(data.Freight);
-                    $('#Total').text(data.Total);
+                    $('#Total').val(data.Total);
                 }
             });
         }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace coderush.Models
 {
@@ -15,13 +12,11 @@ namespace coderush.Models
         public int PurchaseOrderId { get; set; }
         [Display(Name = "GRN Date")]
         public DateTimeOffset GRNDate { get; set; }
-        [Display(Name = "Vendor Delivery Order #")]
-        public string VendorDONumber { get; set; }
-        [Display(Name = "Vendor Bill / Invoice #")]
-        public string VendorInvoiceNumber { get; set; }
-        [Display(Name = "Warehouse")]
-        public int WarehouseId { get; set; }
-        [Display(Name = "Full Receive")]
-        public bool IsFullReceive { get; set; } = true;
+        [Display(Name = "Supplier Delivery Order #")]
+        public string SupplierDONumber { get; set; }
+        [Display(Name = "Supplier Bill / Invoice #")]
+        public string SupplierInvoiceNumber { get; set; }
+        [Display(Name = "BranchArea")]
+        public int BranchAreaId { get; set; }
     }
 }

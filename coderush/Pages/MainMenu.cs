@@ -7,6 +7,41 @@ namespace coderush.Pages
 {
     public static class MainMenu
     {
+        public static class Product
+        {
+            public const string PageName = "Products";
+            public const string RoleName = "Product";
+            public const string Path = "/Product/Index";
+            public const string ControllerName = "Product";
+            public const string ActionName = "Index";
+        }
+        public static class ProductType
+        {
+            public const string PageName = "Product Types";
+            public const string RoleName = "Product Type";
+            public const string Path = "/ProductType/Index";
+            public const string ControllerName = "ProductType";
+            public const string ActionName = "Index";
+        }
+
+        public static class Part
+        {
+            public const string PageName = "Parts";
+            public const string RoleName = "Part";
+            public const string Path = "/Part/Index";
+            public const string ControllerName = "Part";
+            public const string ActionName = "Index";
+        }
+        public static class PartType
+        {
+            public const string PageName = "Part Types";
+            public const string RoleName = "PartType";
+            public const string Path = "/PartType/Index";
+            public const string ControllerName = "PartType";
+            public const string ActionName = "Index";
+        }
+
+
         public static class Customer
         {
             public const string PageName = "Customer";
@@ -16,23 +51,16 @@ namespace coderush.Pages
             public const string ActionName = "Index";
         }
 
-        public static class Vendor
+        public static class Supplier
         {
-            public const string PageName = "Vendor";
-            public const string RoleName = "Vendor";
-            public const string Path = "/Vendor/Index";
-            public const string ControllerName = "Vendor";
+            public const string PageName = "Suppliers";
+            public const string RoleName = "Supplier";
+            public const string Path = "/Supplier/Index";
+            public const string ControllerName = "Supplier";
             public const string ActionName = "Index";
         }
 
-        public static class Product
-        {
-            public const string PageName = "Product";
-            public const string RoleName = "Product";
-            public const string Path = "/Product/Index";
-            public const string ControllerName = "Product";
-            public const string ActionName = "Index";
-        }
+
 
         public static class PurchaseOrder
         {
@@ -169,14 +197,7 @@ namespace coderush.Pages
             public const string ActionName = "Index";
         }
 
-        public static class ProductType
-        {
-            public const string PageName = "Product Type";
-            public const string RoleName = "Product Type";
-            public const string Path = "/ProductType/Index";
-            public const string ControllerName = "ProductType";
-            public const string ActionName = "Index";
-        }
+
 
         public static class SalesType
         {
@@ -205,21 +226,21 @@ namespace coderush.Pages
             public const string ActionName = "Index";
         }
 
-        public static class VendorType
+        public static class SupplierType
         {
-            public const string PageName = "Vendor Type";
-            public const string RoleName = "Vendor Type";
-            public const string Path = "/VendorType/Index";
-            public const string ControllerName = "VendorType";
+            public const string PageName = "Supplier Type";
+            public const string RoleName = "Supplier Type";
+            public const string Path = "/SupplierType/Index";
+            public const string ControllerName = "SupplierType";
             public const string ActionName = "Index";
         }
 
-        public static class Warehouse
+        public static class BranchArea
         {
-            public const string PageName = "Warehouse";
-            public const string RoleName = "Warehouse";
-            public const string Path = "/Warehouse/Index";
-            public const string ControllerName = "Warehouse";
+            public const string PageName = "BranchArea";
+            public const string RoleName = "BranchArea";
+            public const string Path = "/BranchArea/Index";
+            public const string ControllerName = "BranchArea";
             public const string ActionName = "Index";
         }
 

@@ -52,10 +52,10 @@
                 offline: true
             });
 
-            var dataManagerCurrency = ej.DataManager({
-                url: "/api/Currency",
-                adaptor: new ej.WebApiAdaptor()
-            });
+            //var dataManagerCurrency = ej.DataManager({
+            //    url: "/api/Currency",
+            //    adaptor: new ej.WebApiAdaptor()
+            //});
 
             dataManager.ready.done(function (e) { 
                 $("#Grid").ejGrid({
@@ -93,14 +93,14 @@
                         { field: "BranchId", headerText: 'Branch Id', isPrimaryKey: true, isIdentity: true, visible: false },
                         { field: "BranchName", headerText: 'Branch Name', validationRules: { required: true } },
                         { field: "Description", headerText: 'Description', },
-                        { field: "CurrencyId", headerText: 'Currency', foreignKeyField: "CurrencyId", foreignKeyValue: "CurrencyName", dataSource: dataManagerCurrency, validationRules: { required: true } },
+                        //{ field: "CurrencyId", headerText: 'Currency', foreignKeyField: "CurrencyId", foreignKeyValue: "CurrencyName", dataSource: dataManagerCurrency, validationRules: { required: true } },
                         { field: "Address", headerText: 'Address', validationRules: { required: true } },
                         { field: "City", headerText: 'City', },
                         { field: "State", headerText: 'State', },
-                        { field: "ZipCode", headerText: 'ZipCode', },
+                        //{ field: "ZipCode", headerText: 'ZipCode', },
                         { field: "Phone", headerText: 'Phone', },
                         { field: "Email", headerText: 'Email', },
-                        { field: "ContactPerson", headerText: 'CP', validationRules: { required: true } },
+                        { field: "ContactPerson", headerText: 'Contact Person', validationRules: { required: true } },
                     ],
                     actionComplete: "complete",
                 });

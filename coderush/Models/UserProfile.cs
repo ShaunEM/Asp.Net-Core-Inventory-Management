@@ -7,7 +7,7 @@ namespace coderush.Models
 {
     public class UserProfile
     {
-        public int UserProfileId { get; set; }
+        public int UserProfileId { get; set; } = 0;
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

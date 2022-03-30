@@ -75,12 +75,22 @@ namespace coderush.Data
 
         public DbSet<coderush.Models.UnitOfMeasure> UnitOfMeasure { get; set; }
 
-        public DbSet<coderush.Models.Vendor> Vendor { get; set; }
+        public DbSet<coderush.Models.Supplier> Supplier { get; set; }
 
-        public DbSet<coderush.Models.VendorType> VendorType { get; set; }
+        public DbSet<coderush.Models.SupplierType> SupplierType { get; set; }
 
-        public DbSet<coderush.Models.Warehouse> Warehouse { get; set; }
+        public DbSet<coderush.Models.BranchArea> BranchArea { get; set; }
 
         public DbSet<coderush.Models.UserProfile> UserProfile { get; set; }
+
+        public DbSet<coderush.Models.Part> Part { get; set; }
+        public DbSet<coderush.Models.PartType> PartType { get; set; }
+        public DbSet<coderush.Models.ProductPart> ProductPart { get; set; }
+
+
+        public DbSet<coderush.Models.PartInventory> PartInventory { get; set; }
+
+        public DbSet<coderush.Models.InventoryType> InventoryType { get; set; }
+
     }
 }

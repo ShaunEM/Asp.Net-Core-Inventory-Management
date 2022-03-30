@@ -41,11 +41,7 @@ namespace coderush.Controllers.Api
         {
             try
             {
-                purchaseOrderLine.Amount = purchaseOrderLine.Quantity * purchaseOrderLine.Price;
-                purchaseOrderLine.DiscountAmount = (purchaseOrderLine.DiscountPercentage * purchaseOrderLine.Amount) / 100.0;
-                purchaseOrderLine.SubTotal = purchaseOrderLine.Amount - purchaseOrderLine.DiscountAmount;
-                purchaseOrderLine.TaxAmount = (purchaseOrderLine.TaxPercentage * purchaseOrderLine.SubTotal) / 100.0;
-                purchaseOrderLine.Total = purchaseOrderLine.SubTotal + purchaseOrderLine.TaxAmount;
+                purchaseOrderLine.Total = purchaseOrderLine.QTY * purchaseOrderLine.Price;
 
             }
             catch (Exception)
@@ -71,14 +67,8 @@ namespace coderush.Controllers.Api
                     List<PurchaseOrderLine> lines = new List<PurchaseOrderLine>();
                     lines = _context.PurchaseOrderLine.Where(x => x.PurchaseOrderId.Equals(purchaseOrderId)).ToList();
 
-                    //update master data by its lines
-                    purchaseOrder.Amount = lines.Sum(x => x.Amount);
-                    purchaseOrder.SubTotal = lines.Sum(x => x.SubTotal);
-                    
-                    purchaseOrder.Discount = lines.Sum(x => x.DiscountAmount);
-                    purchaseOrder.Tax = lines.Sum(x => x.TaxAmount);
 
-                    purchaseOrder.Total = purchaseOrder.Freight + lines.Sum(x => x.Total);
+                    purchaseOrder.Total = lines.Sum(x => x.Total);
 
                     _context.Update(purchaseOrder);
 
@@ -118,8 +108,10 @@ namespace coderush.Controllers.Api
         [HttpPost("[action]")]
         public IActionResult Remove([FromBody]CrudViewModel<PurchaseOrderLine> payload)
         {
+            int purchaseOrderId = Convert.ToInt32(payload.key);
+
             PurchaseOrderLine purchaseOrderLine = _context.PurchaseOrderLine
-                .Where(x => x.PurchaseOrderLineId == (int)payload.key)
+                .Where(x => x.PurchaseOrderLineId == purchaseOrderId)
                 .FirstOrDefault();
             _context.PurchaseOrderLine.Remove(purchaseOrderLine);
             _context.SaveChanges();

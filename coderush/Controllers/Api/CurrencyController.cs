@@ -33,19 +33,19 @@ namespace coderush.Controllers.Api
             return Ok(new { Items, Count });
         }
 
-        [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> GetByBranchId([FromRoute]int id)
-        {
-            Branch branch = new Branch();
-            Currency currency = new Currency();
-            branch = await _context.Branch.SingleOrDefaultAsync(x => x.BranchId.Equals(id));
-            if (branch != null && branch.CurrencyId != 0)
-            {
-                currency = await _context.Currency.SingleOrDefaultAsync(x => x.CurrencyId.Equals(branch.CurrencyId));
+        //[HttpGet("[action]/{id}")]
+        //public async Task<IActionResult> GetByBranchId([FromRoute]int id)
+        //{
+        //    Branch branch = new Branch();
+        //    Currency currency = new Currency();
+        //    branch = await _context.Branch.SingleOrDefaultAsync(x => x.BranchId.Equals(id));
+        //    if (branch != null)
+        //    {
+        //        currency = await _context.Currency.SingleOrDefaultAsync(x => x.CurrencyId.Equals(branch.CurrencyId));
                 
-            }
-            return Ok(currency);
-        }
+        //    }
+        //    return Ok(currency);
+        //}
 
         [HttpPost("[action]")]
         public IActionResult Insert([FromBody]CrudViewModel<Currency> payload)

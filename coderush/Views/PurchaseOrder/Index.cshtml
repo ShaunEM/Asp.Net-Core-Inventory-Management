@@ -56,18 +56,13 @@
                 adaptor: new ej.WebApiAdaptor()
             });
 
-            var dataManagerVendor = ej.DataManager({
-                url: "/api/Vendor",
+            var dataManagerSupplier = ej.DataManager({
+                url: "/api/Supplier",
                 adaptor: new ej.WebApiAdaptor()
             });
 
             var dataManagerPurchaseType = ej.DataManager({
                 url: "/api/PurchaseType",
-                adaptor: new ej.WebApiAdaptor()
-            });
-
-            var dataManagerCurrency = ej.DataManager({
-                url: "/api/Currency",
                 adaptor: new ej.WebApiAdaptor()
             });
 
@@ -104,16 +99,14 @@
                     allowPaging: true,
                     pageSettings: { pageSize: 10, printMode: ej.Grid.PrintMode.CurrentPage },
                     columns: [
-                        { headerText: 'Detail', template: "<a href='/PurchaseOrder/Detail/{{:PurchaseOrderId}}'>Detail</a>" },
                         { field: "PurchaseOrderId", headerText: 'PO Id', isPrimaryKey: true, isIdentity: true, visible: false },
                         { field: "PurchaseOrderName", headerText: 'PO#', allowEditing: false },
                         { field: "BranchId", headerText: 'Branch', foreignKeyField: "BranchId", foreignKeyValue: "BranchName", dataSource: dataManagerBranch, validationRules: { required: true } },
-                        { field: "VendorId", headerText: 'Vendor', foreignKeyField: "VendorId", foreignKeyValue: "VendorName", dataSource: dataManagerVendor, validationRules: { required: true } },
+                        { field: "SupplierId", headerText: 'Supplier', foreignKeyField: "SupplierId", foreignKeyValue: "SupplierName", dataSource: dataManagerSupplier, validationRules: { required: true } },
                         { field: "OrderDate", headerText: 'Order Date', editType: "datepicker", format: "{0:MM/dd/yyyy}", validationRules: { required: true } },
                         { field: "DeliveryDate", headerText: 'Delivery Date', editType: "datepicker", format: "{0:MM/dd/yyyy}", validationRules: { required: true } },
                         { field: "PurchaseTypeId", headerText: 'Purchase Type', foreignKeyField: "PurchaseTypeId", foreignKeyValue: "PurchaseTypeName", dataSource: dataManagerPurchaseType },
-                        { field: "CurrencyId", headerText: 'Currency', allowEditing: false, foreignKeyField: "CurrencyId", foreignKeyValue: "CurrencyName", dataSource: dataManagerCurrency },
-                        { field: "Freight", headerText: 'Freight', defaultValue: 0, editType: "numericedit", format: "{0:n2}" },
+                        { headerText: 'Detail', template: "<a href='/PurchaseOrder/Detail/{{:PurchaseOrderId}}'>Detail</a>" },
                     ],
                     actionComplete: "complete",
                 });
@@ -126,25 +119,7 @@
             if (args.requestType == 'beginedit') {
                 $("#" + this._id + "_dialogEdit").ejDialog({ title: "Edit Record" });
             }
-            if (args.requestType == 'beginedit' || args.requestType == 'add') {
-                $('#GridBranchId').ejDropDownList({ change: 'branchDdlChange' });
-            }
         }
-
-        function branchDdlChange(e) {
-            $.ajax({
-                url: '/api/Currency/GetByBranchId/' + e.selectedValue,
-                type: 'GET',
-                success: function (data) {
-                    $("#GridCurrencyId").ejDropDownList({
-                        dataSource: [data],
-                        fields: { id: 'CurrencyId', text: 'CurrencyCode', value: 'CurrencyId' },
-                        value: data.CurrencyId
-                    });
-                }
-            })
-        }
-
 
     </script>
 }

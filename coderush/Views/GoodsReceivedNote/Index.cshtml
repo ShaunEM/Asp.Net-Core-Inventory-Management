@@ -51,8 +51,8 @@
                 offline: true
             });
 
-            var dataManagerWarehouse = ej.DataManager({
-                url: "/api/Warehouse",
+            var dataManagerBranchArea = ej.DataManager({
+                url: "/api/BranchArea",
                 adaptor: new ej.WebApiAdaptor()
             });
 
@@ -72,7 +72,7 @@
                     }),
                     toolbarSettings: {
                         showToolbar: true,
-                        toolbarItems: ["add", "edit", "delete", "update", "cancel", "search", "printGrid"]
+                        toolbarItems: ["add", "delete", "update", "cancel", "search", "printGrid"]
                     },
                     editSettings: {
                         allowEditing: true,
@@ -96,12 +96,12 @@
                     columns: [
                         { field: "GoodsReceivedNoteId", headerText: 'GRN', isPrimaryKey: true, isIdentity: true, visible: false },
                         { field: "GoodsReceivedNoteName", headerText: 'GRN#', allowEditing: false },
-                        { field: "IsFullReceive", headerText: 'Full Receive', allowEditing: false, type: "boolean", editType: "booleanedit", defaultValue: true },
-                        { field: "PurchaseOrderId", headerText: 'PO#', foreignKeyField: "PurchaseOrderId", foreignKeyValue: "PurchaseOrderName", dataSource: dataManagerPurchaseOrder, validationRules: { required: true } },
+                        { field: "PurchaseOrderId", headerText: 'PO#', validationRules: { required: true } },
+                        //{ field: "PurchaseOrderId", headerText: 'PO#', foreignKeyField: "PurchaseOrderId", foreignKeyValue: "PurchaseOrderName", dataSource: dataManagerPurchaseOrder, validationRules: { required: true } },
                         { field: "GRNDate", headerText: 'Receiving Date', editType: "datepicker", format: "{0:MM/dd/yyyy}", validationRules: { required: true } },
-                        { field: "VendorDONumber", headerText: 'Vendor DO#', validationRules: { required: true } },
-                        { field: "VendorInvoiceNumber", headerText: 'Vendor Invoice#', },
-                        { field: "WarehouseId", headerText: 'Warehouse', foreignKeyField: "WarehouseId", foreignKeyValue: "WarehouseName", dataSource: dataManagerWarehouse, validationRules: { required: true } },
+                        { field: "SupplierDONumber", headerText: 'Supplier DO#', validationRules: { required: true } },
+                        { field: "SupplierInvoiceNumber", headerText: 'Supplier Invoice#', },
+                        { field: "BranchAreaId", headerText: 'BranchArea', foreignKeyField: "BranchId", foreignKeyValue: "AreaName", dataSource: dataManagerBranchArea, validationRules: { required: true }},
                     ],
                     actionComplete: "complete",
                 });
@@ -111,35 +111,45 @@
         });
 
         function complete(args) {
+            console.log("requestType:" + args.requestType);
+
             if (args.requestType == 'beginedit') {
                 $("#" + this._id + "_dialogEdit").ejDialog({ title: "Edit Record" });
+                //$("#GridBranchAreaId").attr("readonly", "readonly");
+                //$("#GridPurchaseOrderId").attr("readonly", "readonly");
             }
-
-            if (args.requestType == 'beginedit' || args.requestType == 'add') {
-                var selected = $('#GridPurchaseOrderId').data('ejDropDownList');
-                var selectedValue = parseInt(selected.option('value'));
-                var selectedText = selected.option('text');
-                $.ajax({
-                    type: 'GET',
-                    url: '/api/PurchaseOrder/GetNotReceivedYet',
-                    success: function (data) {
-                        if (args.requestType == 'beginedit') {
-                            data.push({ 'PurchaseOrderId': selectedValue, 'PurchaseOrderName': selectedText });
-                        }
-
-                        $("#GridPurchaseOrderId").ejDropDownList({
-                            dataSource: data,
-                            fields: { id: 'PurchaseOrderId', text: 'PurchaseOrderName', value: 'PurchaseOrderId' },
-                            value: selectedValue
-                        });
-                    }
-                });
-
+            if (args.requestType == 'add') {
+                updatePurchaseOrders();
+                $('#GridPurchaseOrderId').ejDropDownList({ change: 'purchaseOrderDdlChange' });
             }
-
         }
 
 
+
+        function updatePurchaseOrders(e) {
+            $.ajax({
+                url: '/api/PurchaseOrder',
+                type: 'GET',
+                success: function (data) {
+                    $("#GridPurchaseOrderId").ejDropDownList({
+                        dataSource: data.Items,
+                        fields: { id: 'PurchaseOrderId', text: 'PurchaseOrderName', value: 'PurchaseOrderId' },
+                    });
+                }
+            })
+        }
+        function purchaseOrderDdlChange(e) {
+            $.ajax({
+                url: '/api/BranchArea/GetAreasByBranchId/' + e.selectedValue,
+                type: 'GET',
+                success: function (data) {
+                    $("#GridBranchAreaId").ejDropDownList({
+                        dataSource: data,
+                        fields: { id: 'BranchAreaId', text: 'AreaName', value: 'BranchAreaId' },
+                    });
+                }
+            })
+        }
     </script>
 }
 
