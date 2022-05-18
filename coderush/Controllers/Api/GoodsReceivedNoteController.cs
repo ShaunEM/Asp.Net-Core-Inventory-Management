@@ -78,14 +78,16 @@ namespace coderush.Controllers.Api
             List<PurchaseOrderLine> purchaseOrderLines = await _context.PurchaseOrderLine.Where(x => x.PurchaseOrderId.Equals(goodsReceivedNote.PurchaseOrderId)).ToListAsync();
             foreach(PurchaseOrderLine purchaseOrderLine in purchaseOrderLines)
             {
+                // Get Last Entry
+                Inventory inventory = (Inventory)_context.Inventory.Where(x => x.StockId == purchaseOrderLine.StockId && x.BranchStoreId == goodsReceivedNote.BranchStoreId).OrderByDescending(x => x.DateTime)?.Take(1)?.SingleOrDefault();
+
                 // Add parts to inventory
-                _context.PartInventory.Add(new PartInventory()
+                _context.Inventory.Add(new Inventory()
                 {
-                    BranchAreaId = goodsReceivedNote.BranchAreaId,
-                    PartId = purchaseOrderLine.PartId,
-                    QTY = purchaseOrderLine.QTY,
-                    InventoryTypeId = _context.InventoryType.Where(x => x.InventoryTypeName == "GoodsReceivedNote").Select(c => c.InventoryTypeId).SingleOrDefault(),
-                    TableId = goodsReceivedNote.GoodsReceivedNoteId,
+                    BranchStoreId = goodsReceivedNote.BranchStoreId,
+                    StockId = purchaseOrderLine.StockId,
+                    QTYChange = purchaseOrderLine.QTY,
+                    QTY = inventory == null ? purchaseOrderLine.QTY : inventory.QTY + purchaseOrderLine.QTY,
                     DateTime = goodsReceivedNote.GRNDate
                 });
             }

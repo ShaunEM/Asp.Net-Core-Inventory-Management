@@ -41,26 +41,19 @@ namespace coderush.Controllers.Api
         public async Task<IActionResult> GetNotShippedYet()
         {
             List<SalesOrder> salesOrders = new List<SalesOrder>();
-            try
-            {
+
+                // TODO: Fix this query, this is going to get very slow.
                 List<Shipment> shipments = new List<Shipment>();
                 shipments = await _context.Shipment.ToListAsync();
                 List<int> ids = new List<int>();
-
                 foreach (var item in shipments)
                 {
                     ids.Add(item.SalesOrderId);
                 }
-
                 salesOrders = await _context.SalesOrder
                     .Where(x => !ids.Contains(x.SalesOrderId))
                     .ToListAsync();
-            }
-            catch (Exception)
-            {
 
-                throw;
-            }
             return Ok(salesOrders);
         }
 
@@ -69,9 +62,7 @@ namespace coderush.Controllers.Api
         {
             SalesOrder result = await _context.SalesOrder
                 .Where(x => x.SalesOrderId.Equals(id))
-                .Include(x => x.SalesOrderLines)
                 .FirstOrDefaultAsync();
-
             return Ok(result);
         }
 
@@ -86,8 +77,8 @@ namespace coderush.Controllers.Api
 
                 if (salesOrder != null)
                 {
-                    List<SalesOrderLine> lines = new List<SalesOrderLine>();
-                    lines = _context.SalesOrderLine.Where(x => x.SalesOrderId.Equals(salesOrderId)).ToList();
+                    List<SalesOrderDetail> lines = new List<SalesOrderDetail>();
+                    lines = _context.SalesOrderDetail.Where(x => x.SalesOrderId.Equals(salesOrderId)).ToList();
 
                     //update master data by its lines
                     salesOrder.Amount = lines.Sum(x => x.Amount);

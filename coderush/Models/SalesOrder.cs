@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace coderush.Models
 {
@@ -32,6 +29,5 @@ namespace coderush.Models
         public double Tax { get; set; }
         public double Freight { get; set; }
         public double Total { get; set; }
-        public List<SalesOrderLine> SalesOrderLines { get; set; } = new List<SalesOrderLine>();
     }
 }

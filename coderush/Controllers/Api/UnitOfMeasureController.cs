@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using coderush.Data;
 using coderush.Models;
 using coderush.Models.SyncfusionViewModels;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace coderush.Controllers.Api
 {
@@ -24,14 +22,9 @@ namespace coderush.Controllers.Api
             _context = context;
         }
 
-        // GET: api/UnitOfMeasure
-        [HttpGet]
-        public async Task<IActionResult> GetUnitOfMeasure()
-        {
-            List<UnitOfMeasure> Items = await _context.UnitOfMeasure.ToListAsync();
-            int Count = Items.Count();
-            return Ok(new { Items, Count });
-        }
+
+
+
 
         [HttpPost("[action]")]
         public IActionResult Insert([FromBody]CrudViewModel<UnitOfMeasure> payload)
@@ -60,7 +53,17 @@ namespace coderush.Controllers.Api
             _context.UnitOfMeasure.Remove(unitOfMeasure);
             _context.SaveChanges();
             return Ok(unitOfMeasure);
+        }
 
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetUnitOfMeasure()
+        {
+            List<UnitOfMeasure> Items = await _context.UnitOfMeasure.ToListAsync();
+            int Count = Items.Count();
+            return Ok(new { Items, Count });
         }
     }
 }

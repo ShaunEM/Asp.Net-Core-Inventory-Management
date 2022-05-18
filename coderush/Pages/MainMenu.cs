@@ -1,12 +1,77 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace coderush.Pages
+﻿namespace coderush.Pages
 {
     public static class MainMenu
     {
+        public static class Branch
+        {
+            public const string PageName = "Branches";
+            public const string RoleName = "NotSet";
+            public const string Path = "/Branch/Index";
+            public const string ControllerName = "Branch";
+            public const string ActionName = "Index";
+        }
+        public static class BranchStore
+        {
+            public const string PageName = "Storage Areas";
+            public const string RoleName = "NotSet";
+            public const string Path = "/BranchStore/Index";
+            public const string ControllerName = "BranchStore";
+            public const string ActionName = "Index";
+        }
+
+
+
+        public static class UnitOfMeasure
+        {
+            public const string PageName = "Unit Of Measure";
+            public const string RoleName = "NotSet";
+            public const string Path = "/UnitOfMeasure/Index";
+            public const string ControllerName = "UnitOfMeasure";
+            public const string ActionName = "Index";
+        }
+
+        public static class StockType
+        {
+            public const string PageName = "Stock Types";
+            public const string RoleName = "NotSet";
+            public const string Path = "/Stock/StockType";
+            public const string ControllerName = "Stock";
+            public const string ActionName = "StockType";
+        }
+        public static class Stock
+        {
+            public const string PageName = "Stock List";
+            public const string RoleName = "NotSet";
+            public const string Path = "/Stock/Index";
+            public const string ControllerName = "Stock";
+            public const string ActionName = "Index";
+        }
+
+        public static class Inventory
+        {
+            public const string PageName = "Inventory";
+            public const string RoleName = "NotSet";
+            public const string Path = "/Inventory/Index";
+            public const string ControllerName = "Inventory";
+            public const string ActionName = "Index";
+        }
+
+        public static class Build
+        {
+            public const string PageName = "Build";
+            public const string RoleName = "NotSet";
+            public const string Path = "/Build/Index";
+            public const string ControllerName = "Build";
+            public const string ActionName = "Index";
+        }
+
+
+
+
+
+
+
+
         public static class Product
         {
             public const string PageName = "Products";
@@ -24,22 +89,8 @@ namespace coderush.Pages
             public const string ActionName = "Index";
         }
 
-        public static class Part
-        {
-            public const string PageName = "Parts";
-            public const string RoleName = "Part";
-            public const string Path = "/Part/Index";
-            public const string ControllerName = "Part";
-            public const string ActionName = "Index";
-        }
-        public static class PartType
-        {
-            public const string PageName = "Part Types";
-            public const string RoleName = "PartType";
-            public const string Path = "/PartType/Index";
-            public const string ControllerName = "PartType";
-            public const string ActionName = "Index";
-        }
+
+
 
 
         public static class Customer
@@ -143,14 +194,6 @@ namespace coderush.Pages
             public const string ActionName = "Index";
         }
 
-        public static class Branch
-        {
-            public const string PageName = "Branch";
-            public const string RoleName = "Branch";
-            public const string Path = "/Branch/Index";
-            public const string ControllerName = "Branch";
-            public const string ActionName = "Index";
-        }
 
         public static class CashBank
         {
@@ -217,36 +260,22 @@ namespace coderush.Pages
             public const string ActionName = "Index";
         }
 
-        public static class UnitOfMeasure
-        {
-            public const string PageName = "Unit Of Measure";
-            public const string RoleName = "Unit Of Measure";
-            public const string Path = "/UnitOfMeasure/Index";
-            public const string ControllerName = "UnitOfMeasure";
-            public const string ActionName = "Index";
-        }
+
 
         public static class SupplierType
         {
-            public const string PageName = "Supplier Type";
+            public const string PageName = "Supplier Types";
             public const string RoleName = "Supplier Type";
             public const string Path = "/SupplierType/Index";
             public const string ControllerName = "SupplierType";
             public const string ActionName = "Index";
         }
 
-        public static class BranchArea
-        {
-            public const string PageName = "BranchArea";
-            public const string RoleName = "BranchArea";
-            public const string Path = "/BranchArea/Index";
-            public const string ControllerName = "BranchArea";
-            public const string ActionName = "Index";
-        }
+
 
         public static class PurchaseType
         {
-            public const string PageName = "Purchase Type";
+            public const string PageName = "Purchase Types";
             public const string RoleName = "Purchase Type";
             public const string Path = "/PurchaseType/Index";
             public const string ControllerName = "PurchaseType";

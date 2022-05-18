@@ -1,7 +1,9 @@
-﻿
+﻿@model coderush.Models.Product
+
 @{
-    ViewData["Title"] = "Part Type";
+    ViewData["Title"] = "Stock Parts";
 }
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 
@@ -10,7 +12,7 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title text-primary"><i class="fa fa-gear"></i> @ViewData["Title"]</h3>
+                <h3 class="box-title"><i class="fa fa-building"></i> @ViewData["Title"]</h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
                             title="Collapse">
@@ -22,19 +24,53 @@
                 </div>
             </div>
             <div class="box-body">
-                <div id="Grid"></div>
+                <div class="content-container-fluid">
+                    <div class="row">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.ProductName)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.ProductName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Description)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.InternalPartNumber)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.InternalPartNumber)
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
             <!-- /.box-body -->
-            <div class="box-footer">
-               
-            </div>
+           
             <!-- /.box-footer-->
         </div>
         <!-- /.box -->
+        <div class="box">
+            
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="Grid"></div>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
     </section>
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+
+
 
 @section Styles{
 
@@ -46,23 +82,35 @@
         $(function () {
 
             var dataManager = ej.DataManager({
-                url: "/api/PartType",
+                url: "/api/ProductPart",
                 adaptor: new ej.WebApiAdaptor(),
+                headers: [{ "ProductId": @Model.ProductId}],
                 offline: true
             });
 
-            dataManager.ready.done(function (e) { 
+            var dataManagerPartType = ej.DataManager({
+                url: "/api/PartType",
+                adaptor: new ej.WebApiAdaptor()
+            });
+
+            var dataManagerPart = ej.DataManager({
+                url: "/api/Part",
+                adaptor: new ej.WebApiAdaptor()
+            });
+
+
+            dataManager.ready.done(function (e) {
                 $("#Grid").ejGrid({
                     dataSource: ej.DataManager({
                         json: e.result,
                         adaptor: new ej.remoteSaveAdaptor(),
-                        insertUrl: "/api/PartType/Insert",
-                        updateUrl: "/api/PartType/Update",
-                        removeUrl: "/api/PartType/Remove",
+                        insertUrl: "/api/ProductPart/Insert",
+                        updateUrl: "/api/ProductPart/Update",
+                        removeUrl: "/api/ProductPart/Remove",
                     }),
                     toolbarSettings: {
                         showToolbar: true,
-                        toolbarItems: ["add", "edit", "delete", "update", "cancel", "search", "printGrid"]
+                        toolbarItems: ["add", "edit", "delete", "update", "cancel"]
                     },
                     editSettings: {
                         allowEditing: true,
@@ -71,34 +119,39 @@
                         showDeleteConfirmDialog: true,
                         editMode: "dialog"
                     },
-                    isResponsive: true,
-                    enableResponsiveRow: true,
-                    allowSorting: true,
-                    allowSearching: true,
-                    allowFiltering: true,
-                    filterSettings: {
-                        filterType: "excel",
-                        maxFilterChoices: 100,
-                        enableCaseSensitivity: false
-                    },
                     allowPaging: true,
-                    pageSettings: { pageSize: 10, printMode: ej.Grid.PrintMode.CurrentPage },
                     columns: [
-                        { field: "PartTypeId", headerText: 'Part Type Id', isPrimaryKey: true, isIdentity: true, visible: false },
-                        { field: "PartTypeName", headerText: 'Part Type Name', validationRules: { required: true } },
-                        { field: "Description", headerText: 'Description', },
+                        { field: "ProductId", headerText: 'Product Id', defaultValue: @Model.ProductId, visible: false },
+                        { field: "ProductPartId", headerText: 'Product Part Id', isPrimaryKey: true, isIdentity: true, visible: false },
+                        { field: "PartTypeId", headerText: 'Part Type', foreignKeyField: "PartTypeId", foreignKeyValue: "PartTypeName", dataSource: dataManagerPartType },
+                        { field: "PartId", headerText: 'Part', foreignKeyField: "PartId", foreignKeyValue: "PartName", dataSource: dataManagerPart },
+                        { field: "QTY", headerText: 'Quantity', defaultValue: 1, editType: "numericedit", format: "{0:n2}" },
+                        { field: "Description", headerText: 'Description' },
                     ],
                     actionComplete: "complete",
                 });
             });
-
-            
         });
-
         function complete(args) {
+
             if (args.requestType == 'beginedit') {
                 $("#" + this._id + "_dialogEdit").ejDialog({ title: "Edit Record" });
             }
+            if (args.requestType == 'beginedit' || args.requestType == 'add') {
+                $('#GridPartTypeId').ejDropDownList({ change: 'partTypeDdlChange' });
+            }
+        }
+        function partTypeDdlChange(e) {
+            $.ajax({
+                url: '/api/Part/GetByPartTypeId/' + e.selectedValue,
+                type: 'GET',
+                success: function (data) {
+                    $("#GridPartId").ejDropDownList({
+                        dataSource: data,
+                        fields: { id: 'PartId', text: 'PartName', value: 'PartId' },
+                     });
+                }
+            })
         }
 
 

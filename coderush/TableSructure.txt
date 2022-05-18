@@ -1,0 +1,229 @@
+﻿StockTransfer
+	From_BranchStoreId
+	To_BranchStoreId
+	ShipmentId
+
+StockTransferDetail
+	StockId
+	QTY
+
+ShipmentType
+	ShipmentTypeId
+	Name
+
+Shipment
+	ShipmentId
+	ShipDate
+	ETADate
+	DeliveryDate
+
+
+
+
+-----------------------------------------------------------
+UnitOfMeasue
+	Id
+	...
+-----------------------------------------------------------
+Branch
+	Id
+	BranchName,
+	Description,
+	Address,
+	...
+---
+1	Branch001	Durban		Addr001
+2	Branch002	Mauritius	Addr002
+3.	Branch003	JHB			Addr003
+-----------------------------------------------------------
+BranchStore
+	Id
+	Branch_Id
+	StoreName
+	Description
+1	1	MAIN		This is the big one
+2	2	MAIN	
+3	2	Workshop
+-----------------------------------------------------------
+StockType
+	Id
+	Description					(LED's, ORings, Housings, Tracking units)
+
+Stock
+	Id
+	StockType_Id		
+	Name					(Autocam DF, Red LED, ORing)
+	Description
+	InternalPartNumber
+	UnitOfMeasue_Id
+	FootPrint
+	Note
+	StockBundle_Id
+-----------------------------------------------------------
+StockBilOfMaterial
+	...
+
+-----------------------------------------------------------
+
+StockBundleType
+	StockBundleTypeId
+	StockBundleTypeName					[BOM]
+	CodePrefix
+
+StockBundleDetail
+	Id
+	StockBundleId
+	StockId
+	QTY
+	UnitPrice
+	Total
+
+StockBundle
+	StockBundleId
+	StockBundleTypeId			<- Why
+	FromId
+	BranchStoreId				<- In where
+	BundleCode
+---
+1	1	CODE001
+---
+
+
+ReceiveStock
+	ReceiveStockId
+	DateTime
+	Note
+	BOE
+	StockBundle_Id
+
+	DisptachId		?
+	PurchaseOrderId
+-----------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TrackingType
+	TrackingTypeId
+	Name				(PurchaseOrder, BranchTransfer, StoreTransfer, SalesOrder)
+	TrackCodePrefix
+----
+1	PurchaseOrder	PO
+2	Transfer		TR
+3	SalesOrder		SO
+
+Tracking
+	TrackingId
+	TrackingType_Id		(PurchaseOrder, Transfer, SalesOrder, Build)
+	SourceForeign_Id
+	TargetForeign_Id
+	TrackingCode	
+---
+1		1		1	PO00001
+2
+3
+TrackingDetail
+	TrackingDetailId
+	StockId
+	QTY
+	UnitPrice
+	Total
+
+
+
+SupplierType
+	Id
+	...
+
+Supplier
+	Id
+	Name
+	SupplierType_Id
+	Address
+	City
+	State
+	Website
+	Phone
+	Email
+	ContactPerson
+
+SupplierAsset
+	Id
+	Supplier_Id
+	Asset_Id
+	LeadTime				(days)
+	UnitPrice
+-----------------------------------------------------------
+PurchaseType
+	Id
+	...
+
+PurchaseOrder
+	Id
+	Branch_Id
+	Supplier_Id
+	PurchaseType_Id
+	StockBundle
+	CreateDateTime
+	CompleteDateTime
+	Note
+	TotalPrice
+	?	TrackingCode, or Type
+
+1	1	1	1	1	DT	Note	1234
+-----------------------------------------------------------
+Inventory
+	Id
+	BranchStore_id
+	Stock_Id
+	DateTime
+	ChangeQTY
+	SumQTY
+	Tracking_Id
+
+
+
+
+
+-----------------------------------------------------------
+StockMovement
+	Id
+	StockBundle_Id		(may or may not be as order)
+	Note
+	DateTime
+	Tracking_Id
+---
+1	1	not all stock	DT	1	
+1	2	all stock ok	DT	1
+-----------------------------------------------------------
+Build
+	Id
+	Branch_Id	
+	Stock_Id
+	DateTime
+	Note
+	QTY
+	Tracking_Id
+-----------------------------------------------------------
+
+
+
+
+
+
+
+

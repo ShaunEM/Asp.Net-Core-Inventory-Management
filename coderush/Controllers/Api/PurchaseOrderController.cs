@@ -21,78 +21,73 @@ namespace coderush.Controllers.Api
         private readonly ApplicationDbContext _context;
         private readonly INumberSequence _numberSequence;
 
-        public PurchaseOrderController(ApplicationDbContext context,
-                        INumberSequence numberSequence)
+        public PurchaseOrderController(ApplicationDbContext context,INumberSequence numberSequence)
         {
             _context = context;
             _numberSequence = numberSequence;
         }
 
-        // GET: api/GetOpenPurchaseOrders
-        [HttpGet]
-        public async Task<IActionResult> GetPurchaseOrderAsync()
-        {
-            //List<PurchaseOrder> Items = await _context.PurchaseOrder.ToListAsync();
-            List<PurchaseOrder> Items = await _context.PurchaseOrder.Where(c => !_context.GoodsReceivedNote.Select(b => b.PurchaseOrderId).Contains(c.PurchaseOrderId)).ToListAsync();
-
-            //var Items = (from po in _context.PurchaseOrder
-            //            join rn in _context.GoodsReceivedNote on po.PurchaseOrderId equals rn.PurchaseOrderId into gj
-            //            from subpet in gj.DefaultIfEmpty()
-            //            select new
-            //            {
-            //                po.PurchaseOrderId,
-            //                po.PurchaseOrderName,
-            //                po.BranchId,
-            //                po.SupplierId,
-            //                po.OrderDate,
-            //                po.DeliveryDate,
-            //                po.PurchaseTypeId,
-            //                po.Remarks,
-            //                po.Total,
-            //                subpet.GoodsReceivedNoteId
-            //            }).Where(subpet => subpet.GoodsReceivedNoteId == null);
 
 
-            int Count = Items.Count();
-            return Ok(new { Items, Count });
-        }
-
-
-        // GET: api/PurchaseOrder
+        //// GET: api/GetOpenPurchaseOrders
         //[HttpGet]
-        //public async Task<IActionResult> GetPurchaseOrder()
+        //public async Task<IActionResult> GetPurchaseOrderAsync()
         //{
-        //    List<PurchaseOrder> Items = await _context.PurchaseOrder.ToListAsync();
+        //    //List<PurchaseOrder> Items = await _context.PurchaseOrder.ToListAsync();
+        //    List<PurchaseOrder> Items = await _context.PurchaseOrder.Where(c => !_context.GoodsReceivedNote.Select(b => b.PurchaseOrderId).Contains(c.PurchaseOrderId)).ToListAsync();
+        //    //var Items = (from po in _context.PurchaseOrder
+        //    //            join rn in _context.GoodsReceivedNote on po.PurchaseOrderId equals rn.PurchaseOrderId into gj
+        //    //            from subpet in gj.DefaultIfEmpty()
+        //    //            select new
+        //    //            {
+        //    //                po.PurchaseOrderId,
+        //    //                po.PurchaseOrderName,
+        //    //                po.BranchId,
+        //    //                po.SupplierId,
+        //    //                po.OrderDate,
+        //    //                po.DeliveryDate,
+        //    //                po.PurchaseTypeId,
+        //    //                po.Remarks,
+        //    //                po.Total,
+        //    //                subpet.GoodsReceivedNoteId
+        //    //            }).Where(subpet => subpet.GoodsReceivedNoteId == null);
         //    int Count = Items.Count();
         //    return Ok(new { Items, Count });
         //}
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetNotReceivedYet()
+
+        // GET: api/PurchaseOrder
+        [HttpGet]
+        public async Task<IActionResult> GetPurchaseOrder()
         {
-            List<PurchaseOrder> purchaseOrders = new List<PurchaseOrder>();
-            try
-            {
-                List<GoodsReceivedNote> grns = new List<GoodsReceivedNote>();
-                grns = await _context.GoodsReceivedNote.ToListAsync();
-                List<int> ids = new List<int>();
-
-                foreach (var item in grns)
-                {
-                    ids.Add(item.PurchaseOrderId);
-                }
-
-                purchaseOrders = await _context.PurchaseOrder
-                    .Where(x => !ids.Contains(x.PurchaseOrderId))
-                    .ToListAsync();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            return Ok(purchaseOrders);
+            List<PurchaseOrder> Items = await _context.PurchaseOrder.ToListAsync();
+            int Count = Items.Count();
+            return Ok(new { Items, Count });
         }
+
+        //[HttpGet("[action]")]
+        //public async Task<IActionResult> GetNotReceivedYet()
+        //{
+        //    List<PurchaseOrder> purchaseOrders = new List<PurchaseOrder>();
+        //    try
+        //    {
+        //        List<GoodsReceivedNote> grns = new List<GoodsReceivedNote>();
+        //        grns = await _context.GoodsReceivedNote.ToListAsync();
+        //        List<int> ids = new List<int>();
+        //        foreach (var item in grns)
+        //        {
+        //            ids.Add(item.PurchaseOrderId);
+        //        }
+        //        purchaseOrders = await _context.PurchaseOrder
+        //            .Where(x => !ids.Contains(x.PurchaseOrderId))
+        //            .ToListAsync();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //    return Ok(purchaseOrders);
+        //}
 
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetById(int id)

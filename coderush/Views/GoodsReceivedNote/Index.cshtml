@@ -51,8 +51,8 @@
                 offline: true
             });
 
-            var dataManagerBranchArea = ej.DataManager({
-                url: "/api/BranchArea",
+            var dataManagerBranchStore = ej.DataManager({
+                url: "/api/BranchStore",
                 adaptor: new ej.WebApiAdaptor()
             });
 
@@ -101,7 +101,7 @@
                         { field: "GRNDate", headerText: 'Receiving Date', editType: "datepicker", format: "{0:MM/dd/yyyy}", validationRules: { required: true } },
                         { field: "SupplierDONumber", headerText: 'Supplier DO#', validationRules: { required: true } },
                         { field: "SupplierInvoiceNumber", headerText: 'Supplier Invoice#', },
-                        { field: "BranchAreaId", headerText: 'BranchArea', foreignKeyField: "BranchId", foreignKeyValue: "AreaName", dataSource: dataManagerBranchArea, validationRules: { required: true }},
+                        { field: "BranchStoreId", headerText: 'Branch Store', foreignKeyField: "BranchStoreId", foreignKeyValue: "BranchStoreName", dataSource: dataManagerBranchStore, validationRules: { required: true }},
                     ],
                     actionComplete: "complete",
                 });
@@ -140,12 +140,12 @@
         }
         function purchaseOrderDdlChange(e) {
             $.ajax({
-                url: '/api/BranchArea/GetAreasByBranchId/' + e.selectedValue,
+                url: '/api/BranchStore/GetBranchStoresByBranchId/' + e.selectedValue,
                 type: 'GET',
                 success: function (data) {
                     $("#GridBranchAreaId").ejDropDownList({
                         dataSource: data,
-                        fields: { id: 'BranchAreaId', text: 'AreaName', value: 'BranchAreaId' },
+                        fields: { id: 'BranchStoreId', text: 'BranchStoreName', value: 'BranchStoreId' },
                     });
                 }
             })

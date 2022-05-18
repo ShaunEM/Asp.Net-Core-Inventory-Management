@@ -35,8 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Inventory\" />
-    <Folder Include="Views\NewFolder\" />
+    <Folder Include="Controllers\ToCheck\Purchase\" />
   </ItemGroup>
 
 </Project>

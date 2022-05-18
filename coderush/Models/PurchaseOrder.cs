@@ -9,8 +9,9 @@ namespace coderush.Models
         public int PurchaseOrderId { get; set; }
         [Display(Name = "Order Number")]
         public string PurchaseOrderName { get; set; }
-        [Display(Name = "Branch")]
-        public int BranchId { get; set; }
+
+        [Display(Name = "BranchStore")]
+        public int BranchStoreId { get; set; }
         [Display(Name = "Supplier")]
         public int SupplierId { get; set; }
         public DateTimeOffset OrderDate { get; set; }

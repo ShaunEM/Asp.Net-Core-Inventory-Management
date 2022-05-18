@@ -56,7 +56,7 @@ namespace coderush.Controllers.Api
         public IActionResult Remove([FromBody]CrudViewModel<Customer> payload)
         {
             Customer customer = _context.Customer
-                .Where(x => x.CustomerId == (int)payload.key)
+                .Where(x => x.CustomerId == System.Convert.ToInt32(payload.key))
                 .FirstOrDefault();
             _context.Customer.Remove(customer);
             _context.SaveChanges();

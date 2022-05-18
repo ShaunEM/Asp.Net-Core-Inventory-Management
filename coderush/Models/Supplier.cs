@@ -4,10 +4,11 @@ namespace coderush.Models
 {
     public class Supplier
     {
+        [Key]
         public int SupplierId { get; set; }
         
         [Required]
-        [MaxLength(50)]
+        [DataType("NVARCHAR"), MaxLength(50)]
         public string SupplierName { get; set; }
 
         [Display(Name = "Supplier Type")]

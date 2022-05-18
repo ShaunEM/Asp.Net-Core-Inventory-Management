@@ -1,0 +1,11 @@
+﻿
+
+4.	Inventory 
+4.1		Receive Asset
+4.2		Dispatch Asset
+4.2		View Asset
+5.	Transfer Asset
+
+
+
+

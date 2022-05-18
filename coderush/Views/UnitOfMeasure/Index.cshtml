@@ -56,9 +56,9 @@
                 dataSource: ej.DataManager({
                     json: e.result,
                     adaptor: new ej.remoteSaveAdaptor(),
-                    insertUrl: "/api/UnitOfMeasure/Insert",
+                    insertUrl: "/api/UnitOfMeasure/Create",
                     updateUrl: "/api/UnitOfMeasure/Update",
-                    removeUrl: "/api/UnitOfMeasure/Remove",
+                    removeUrl: "/api/UnitOfMeasure/Delete",
                 }),
                 toolbarSettings: {
                     showToolbar: true,
@@ -85,7 +85,7 @@
                 pageSettings: { pageSize: 10, printMode: ej.Grid.PrintMode.CurrentPage },
                 columns: [
                     { field: "UnitOfMeasureId", headerText: 'Unit of Measure Id', isPrimaryKey: true, isIdentity: true, visible: false },
-                    { field: "UnitOfMeasureName", headerText: 'Unit of Measure Name', validationRules: { required: true } },
+                    { field: "DisplayName", headerText: 'Display Name', validationRules: { required: true } },
                     { field: "Description", headerText: 'Description', },
                 ],
                 actionComplete: "complete",

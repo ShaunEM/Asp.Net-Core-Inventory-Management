@@ -1,0 +1,239 @@
+﻿@{
+    ViewData["Title"] = "Inventory";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- Default box -->
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-building"></i>@ViewData["Title"]</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                            title="Collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="box-body">
+                <div class="content-container-fluid">
+                    <div class="row">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                Branch
+                            </dt>
+                            <dd>
+                                <input type="text" id='branch' />
+                            </dd>
+                            <dt>
+                                Store
+                            </dt>
+                            <dd>
+                                <input type="text" id='branchstore' />
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="row">
+                        <input id="showInventory" type="button" value="VIEW" onclick="showInventory()" />
+                        <input id="transferStock" type="button" value="TRANSFER STOCK" onclick="showTransferStockDialog()" />
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+        <div class="box">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="Grid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="transferStockDailog">
+            <div class="row">
+                <dl class="dl-horizontal">
+                    <dt>
+                        Store
+                    </dt>
+                    <dd>
+                        <select id='transferBranchStore'></select>
+                    </dd>
+                    <dt>
+                        QTY
+                    </dt>
+                    <dd>
+                        <input type="number" id="transferQTY" />
+                    </dd>
+                    <dt>
+                        Reference
+                    </dt>
+                    <dd>
+                        <input type="text" id="reference" />
+                    </dd>
+                </dl>
+            </div>
+            <div class="row">
+                <input onclick="transferStock()" type="button" value="TRANSFER"/>
+            </div>
+        </div>
+
+</section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+
+
+@section Styles{
+
+}
+
+@section Scripts{
+
+    <script type="text/javascript">
+        var grid = null;
+        $(function () {
+            $("#transferStockDailog").ejDialog({
+                showOnInit: false,
+                title: "Transfer stock"
+            });
+
+            var dataManagerBranch = ej.DataManager({
+                url: "/api/Branch",
+                adaptor: new ej.WebApiAdaptor()
+            });
+
+            $('#branch').ejDropDownList({
+                dataSource: dataManagerBranch,
+                fields: {
+                    id: 'BranchId',
+                    text: 'BranchName',
+                    value: 'BranchId'
+                },
+                enabled: true,
+                change: function (e) {
+                    $.ajax({
+                        url: '/api/BranchStore/GetBranchStoresByBranchId/' + e.selectedValue,
+                        type: 'GET',
+                        success: function (data) {
+                            $("#branchstore").ejDropDownList({
+                                dataSource: [{
+                                    BranchStoreId: 0,
+                                    BranchStoreName: "<- SELECT ALL ->",
+                                }].concat(data),
+                                fields: {
+                                    id: 'BranchStoreId',
+                                    text: 'BranchStoreName',
+                                    value: 'BranchStoreId'
+                                },
+                                enabled: true,
+                                selectedIndex: 0,
+                            });
+                        }
+                    })
+                }
+            })
+        });
+
+
+
+        function showInventory() {
+
+            var dataManager = ej.DataManager({
+                url: "/api/Inventory/GetInventory",
+                adaptor: new ej.WebApiAdaptor(),
+                offline: true,
+                headers: [{
+                    "BranchId": parseInt($('#branch').val()),
+                    "BranchStoreId": parseInt($('#branchstore').val())
+                }],
+            });
+            dataManager.ready.done(function (e) {
+                if (grid != null) {
+                    var gridObj = $("#Grid").data("ejGrid");
+                    gridObj.dataSource(e.result);
+                } else {
+                    grid = $("#Grid").ejGrid({
+                        dataSource: ej.DataManager({
+                            json: e.result,
+                            adaptor: new ej.remoteSaveAdaptor(),
+                        }),
+                        toolbarSettings: {
+                            showToolbar: false,
+                        },
+                        editSettings: {
+                            allowEditing: false,
+                            allowAdding: false,
+                            allowDeleting: false,
+                        },
+                        allowPaging: true,
+                        columns: [
+                            { field: "StockId", headerText: 'StockId', isPrimaryKey: true, isIdentity: true, visible: false },
+                            { field: "StockName", headerText: 'Name' },
+                            { field: "InternalPartNumber", headerText: 'Internal Part Number' },
+                            { field: "Total", headerText: 'Total', defaultValue: 1, editType: "numericedit", },
+                        ]
+                    });
+                }
+            });
+        }
+
+        function showTransferStockDialog() {
+            $.ajax({
+                url: '/api/BranchStore/GetBranchStoresByBranchId/' + $("#branch").val(),
+                type: 'GET',
+                success: function (data) {
+                    $("#transferBranchStore").ejDropDownList({
+                        dataSource: data,
+                        fields: {
+                            id: 'BranchStoreId',
+                            text: 'BranchStoreName',
+                            value: 'BranchStoreId'
+                        },
+                        enabled: true,
+                        selectedIndex: 0,
+                    });
+                }
+            })
+            $("#transferStockDailog").ejDialog("open");
+        }
+
+        function transferStock() {
+
+            var grid = $("#Grid").data("ejGrid");
+            var selectedRecords = grid.getSelectedRecords();
+            //var rows = JSON.stringify(selectedRecords);
+            //console.log(rows);
+
+            $.post("/api/Inventory/TransferStock", {
+                fromBranchStoreId: parseInt($('#branchstore').data('ejDropDownList').option('value')),
+                toBranchStoreId: parseInt($("#transferBranchStore").data('ejDropDownList').option('value')),
+                stockId: parseInt(selectedRecords[0].StockId),
+                qty: parseInt($("#transferQTY").val()),
+                reference: $("#reference").val()
+            }, function (result) {
+
+                console.log(result);
+                showInventory();
+                $("#transferStockDailog").ejDialog("close");
+            })
+
+           
+
+
+        }
+    </script>
+}
+

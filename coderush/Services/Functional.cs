@@ -53,7 +53,7 @@ namespace coderush.Services
                 await _context.Branch.AddAsync(new Branch { BranchName = "Default" });
                 await _context.SaveChangesAsync();
 
-                await _context.BranchArea.AddAsync(new BranchArea { AreaName = "Default" });
+                await _context.BranchStore.AddAsync(new BranchStore { BranchStoreName = "Default" });
                 await _context.SaveChangesAsync();
 
                 await _context.CashBank.AddAsync(new CashBank { CashBankName = "Default" });
@@ -77,11 +77,15 @@ namespace coderush.Services
                 await _context.ShipmentType.AddAsync(new ShipmentType { ShipmentTypeName = "Default" });
                 await _context.SaveChangesAsync();
 
-                await _context.UnitOfMeasure.AddAsync(new UnitOfMeasure { UnitOfMeasureName = "PCS" });
+                await _context.UnitOfMeasure.AddAsync(new UnitOfMeasure { DisplayName = "PCS" });
                 await _context.SaveChangesAsync();
 
                 await _context.ProductType.AddAsync(new ProductType { ProductTypeName = "Default" });
                 await _context.SaveChangesAsync();
+
+
+
+
 
                 // TODO: 
                 //List<Product> products = new List<Product>() {

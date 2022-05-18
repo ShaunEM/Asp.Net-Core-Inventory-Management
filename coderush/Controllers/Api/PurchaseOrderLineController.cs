@@ -41,7 +41,7 @@ namespace coderush.Controllers.Api
         {
             try
             {
-                purchaseOrderLine.Total = purchaseOrderLine.QTY * purchaseOrderLine.Price;
+                purchaseOrderLine.Total = purchaseOrderLine.QTY * purchaseOrderLine.UnitPrice;
 
             }
             catch (Exception)

@@ -34,10 +34,10 @@
                                 @Html.DisplayFor(model => model.PurchaseOrderName)
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.BranchId)
+                                @Html.DisplayNameFor(model => model.BranchStoreId)
                             </dt>
                             <dd>
-                                @Html.TextBoxFor(model => model.BranchId, new { @readonly = "readonly" })
+                                @Html.TextBoxFor(model => model.BranchStoreId, new { @readonly = "readonly" })
                             </dd>
                             <dt>
                                 @Html.DisplayNameFor(model => model.SupplierId)
@@ -117,8 +117,8 @@
                 offline: true,
             });
 
-            var dataManagerPart = ej.DataManager({
-                url: "/api/Part",
+            var dataManagerStock = ej.DataManager({
+                url: "/api/Stock",
                 adaptor: new ej.WebApiAdaptor()
             });
 
@@ -149,8 +149,8 @@
 
             $('#BranchId').ejDropDownList({
                 dataSource: dataManagerBranch,
-                fields: { id: 'BranchId', text: 'BranchName', value: 'BranchId' },
-                value: @Model.BranchId,
+                fields: { id: 'BranchStoreId', text: 'BranchStoreName', value: 'BranchStoreId' },
+                value: @Model.BranchStoreId,
                 enabled: false,
             });
 
@@ -192,10 +192,10 @@
                     columns: [
                         { field: "PurchaseOrderLineId", headerText: 'Line Id', isPrimaryKey: true, isIdentity: true, visible: false },
                         { field: "PurchaseOrderId", headerText: 'PO#', defaultValue: @Model.PurchaseOrderId, foreignKeyField: "PurchaseOrderId", foreignKeyValue: "PurchaseOrderName", dataSource: dataManagerPurchaseOrder, visible: false },
-                        { field: "PartId", headerText: 'Part', foreignKeyField: "PartId", foreignKeyValue: "PartName", dataSource: dataManagerPart },
+                        { field: "StockId", headerText: 'Stock Item', foreignKeyField: "StockId", foreignKeyValue: "StockName", dataSource: dataManagerStock },
                         { field: "Description", headerText: 'Description' },
-                        { field: "Quantity", headerText: 'Qty', defaultValue: 1, editType: "numericedit", },
-                        { field: "Price", headerText: 'Price', defaultValue: 0, editType: "numericedit", format: "{0:n2}", editParams: { decimalPlaces: 2 } },
+                        { field: "QTY", headerText: 'Quantity', defaultValue: 1, editType: "numericedit", },
+                        { field: "UnitPrice", headerText: 'Unit Price', defaultValue: 0, editType: "numericedit", format: "{0:n2}", editParams: { decimalPlaces: 2 } },
                         { field: "Total", headerText: 'Total', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
                     ],
                     actionComplete: "complete",

@@ -278,9 +278,6 @@ namespace coderush.Migrations
                     b.Property<string>("ContactPerson")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("CurrencyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
@@ -293,12 +290,30 @@ namespace coderush.Migrations
                     b.Property<string>("State")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ZipCode")
-                        .HasColumnType("longtext");
-
                     b.HasKey("BranchId");
 
                     b.ToTable("Branch");
+                });
+
+            modelBuilder.Entity("coderush.Models.BranchStore", b =>
+                {
+                    b.Property<int>("BranchStoreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BranchStoreName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("BranchStoreId");
+
+                    b.ToTable("BranchStore");
                 });
 
             modelBuilder.Entity("coderush.Models.CashBank", b =>
@@ -403,14 +418,14 @@ namespace coderush.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("BranchAreaId")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset>("GRNDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("GoodsReceivedNoteName")
                         .HasColumnType("longtext");
-
-                    b.Property<bool>("IsFullReceive")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("PurchaseOrderId")
                         .HasColumnType("int");
@@ -421,12 +436,25 @@ namespace coderush.Migrations
                     b.Property<string>("SupplierInvoiceNumber")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("WarehouseId")
-                        .HasColumnType("int");
-
                     b.HasKey("GoodsReceivedNoteId");
 
                     b.ToTable("GoodsReceivedNote");
+                });
+
+            modelBuilder.Entity("coderush.Models.InventoryType", b =>
+                {
+                    b.Property<int>("InventoryTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("InventoryTypeName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("InventoryTypeId");
+
+                    b.ToTable("InventoryType");
                 });
 
             modelBuilder.Entity("coderush.Models.Invoice", b =>
@@ -499,66 +527,33 @@ namespace coderush.Migrations
                     b.ToTable("NumberSequence");
                 });
 
-            modelBuilder.Entity("coderush.Models.Part", b =>
+            modelBuilder.Entity("coderush.Models.PartInventory", b =>
                 {
+                    b.Property<int>("PartInventoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("BranchAreaId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("DateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("InventoryTypeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PartId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Comment")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Foorprint")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("InternalPartNumber")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("PartName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int>("PartTypeId")
+                    b.Property<int>("QTY")
                         .HasColumnType("int");
 
-                    b.Property<string>("ProductionRemarks")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int>("UnitOfMeasureId")
+                    b.Property<int>("TableId")
                         .HasColumnType("int");
 
-                    b.HasKey("PartId");
+                    b.HasKey("PartInventoryId");
 
-                    b.ToTable("Part");
-                });
-
-            modelBuilder.Entity("coderush.Models.PartType", b =>
-                {
-                    b.Property<int>("PartTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("PartTypeName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("PartTypeId");
-
-                    b.ToTable("PartType");
+                    b.ToTable("PartInventory");
                 });
 
             modelBuilder.Entity("coderush.Models.PaymentReceive", b =>
@@ -716,23 +711,11 @@ namespace coderush.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("double");
-
                     b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CurrencyId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("DeliveryDate")
                         .HasColumnType("datetime");
-
-                    b.Property<double>("Discount")
-                        .HasColumnType("double");
-
-                    b.Property<double>("Freight")
-                        .HasColumnType("double");
 
                     b.Property<DateTimeOffset>("OrderDate")
                         .HasColumnType("datetime");
@@ -746,14 +729,8 @@ namespace coderush.Migrations
                     b.Property<string>("Remarks")
                         .HasColumnType("longtext");
 
-                    b.Property<double>("SubTotal")
-                        .HasColumnType("double");
-
                     b.Property<int>("SupplierId")
                         .HasColumnType("int");
-
-                    b.Property<double>("Tax")
-                        .HasColumnType("double");
 
                     b.Property<double>("Total")
                         .HasColumnType("double");
@@ -769,38 +746,20 @@ namespace coderush.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("double");
-
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
-                    b.Property<double>("DiscountAmount")
-                        .HasColumnType("double");
-
-                    b.Property<double>("DiscountPercentage")
-                        .HasColumnType("double");
+                    b.Property<int>("PartId")
+                        .HasColumnType("int");
 
                     b.Property<double>("Price")
                         .HasColumnType("double");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PurchaseOrderId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Quantity")
-                        .HasColumnType("double");
-
-                    b.Property<double>("SubTotal")
-                        .HasColumnType("double");
-
-                    b.Property<double>("TaxAmount")
-                        .HasColumnType("double");
-
-                    b.Property<double>("TaxPercentage")
-                        .HasColumnType("double");
+                    b.Property<int>("QTY")
+                        .HasColumnType("int");
 
                     b.Property<double>("Total")
                         .HasColumnType("double");
@@ -961,6 +920,9 @@ namespace coderush.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("BranchAreaId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsFullShipment")
                         .HasColumnType("tinyint(1)");
 
@@ -974,9 +936,6 @@ namespace coderush.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<int>("ShipmentTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WarehouseId")
                         .HasColumnType("int");
 
                     b.HasKey("ShipmentId");
@@ -1000,6 +959,80 @@ namespace coderush.Migrations
                     b.HasKey("ShipmentTypeId");
 
                     b.ToTable("ShipmentType");
+                });
+
+            modelBuilder.Entity("coderush.Models.Stock", b =>
+                {
+                    b.Property<int>("StockId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Footprint")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("InternalPartNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("StockName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("StockTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnitOfMeasureId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StockId");
+
+                    b.ToTable("Stock");
+                });
+
+            modelBuilder.Entity("coderush.Models.StockBilOfMaterial", b =>
+                {
+                    b.Property<int>("StockBilOfMaterialId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Child_StockId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QTY")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StockId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StockBilOfMaterialId");
+
+                    b.ToTable("StockBilOfMaterial");
+                });
+
+            modelBuilder.Entity("coderush.Models.StockType", b =>
+                {
+                    b.Property<int>("StockTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("StockTypeId");
+
+                    b.ToTable("StockType");
                 });
 
             modelBuilder.Entity("coderush.Models.Supplier", b =>
@@ -1076,11 +1109,13 @@ namespace coderush.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<string>("UnitOfMeasureName")
+                    b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(6)
+                        .HasColumnType("varchar(6)");
 
                     b.HasKey("UnitOfMeasureId");
 
@@ -1120,27 +1155,6 @@ namespace coderush.Migrations
                     b.HasKey("UserProfileId");
 
                     b.ToTable("UserProfile");
-                });
-
-            modelBuilder.Entity("coderush.Models.Warehouse", b =>
-                {
-                    b.Property<int>("WarehouseId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("WarehouseName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("WarehouseId");
-
-                    b.ToTable("Warehouse");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1196,13 +1210,11 @@ namespace coderush.Migrations
 
             modelBuilder.Entity("coderush.Models.PurchaseOrderLine", b =>
                 {
-                    b.HasOne("coderush.Models.PurchaseOrder", "PurchaseOrder")
+                    b.HasOne("coderush.Models.PurchaseOrder", null)
                         .WithMany("PurchaseOrderLines")
                         .HasForeignKey("PurchaseOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("PurchaseOrder");
                 });
 
             modelBuilder.Entity("coderush.Models.SalesOrderLine", b =>

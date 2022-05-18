@@ -52,7 +52,7 @@
             });
 
             var dataManagerWarehouse = ej.DataManager({
-                url: "/api/Warehouse",
+                url: "/api/BranchStore",
                 adaptor: new ej.WebApiAdaptor()
             });
 
@@ -101,11 +101,11 @@
                     columns: [
                         { field: "ShipmentId", headerText: 'Shipment', isPrimaryKey: true, isIdentity: true, visible: false },
                         { field: "ShipmentName", headerText: 'Shipment / DO#', allowEditing: false },
-                        { field: "IsFullShipment", headerText: 'Full Shipment', allowEditing: false, type: "boolean", editType: "booleanedit", defaultValue: true },
+                        //{ field: "IsFullShipment", headerText: 'Full Shipment', allowEditing: false, type: "boolean", editType: "booleanedit", defaultValue: true },
                         { field: "SalesOrderId", headerText: 'SO#', foreignKeyField: "SalesOrderId", foreignKeyValue: "SalesOrderName", dataSource: dataManagerSalesOrder, validationRules: { required: true } },
                         { field: "ShipmentDate", headerText: 'Shipment Date', editType: "datepicker", format: "{0:MM/dd/yyyy}", validationRules: { required: true } },
                         { field: "ShipmentTypeId", headerText: 'Shipment Type', foreignKeyField: "ShipmentTypeId", foreignKeyValue: "ShipmentTypeName", dataSource: dataManagerShipmentType },
-                        { field: "WarehouseId", headerText: 'Warehouse', foreignKeyField: "WarehouseId", foreignKeyValue: "WarehouseName", dataSource: dataManagerWarehouse, validationRules: { required: true } },
+                        { field: "BranchStoreId", headerText: 'Branch Store', foreignKeyField: "BranchStoreId", foreignKeyValue: "BranchStoreName", dataSource: dataManagerWarehouse, validationRules: { required: true } },
                     ],
                     actionComplete: "complete",
                 });

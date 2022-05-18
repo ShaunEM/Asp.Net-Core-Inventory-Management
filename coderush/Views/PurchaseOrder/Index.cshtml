@@ -51,8 +51,8 @@
                 offline: true
             });
 
-            var dataManagerBranch = ej.DataManager({
-                url: "/api/Branch",
+            var dataManagerBranchStore = ej.DataManager({
+                url: "/api/BranchStore",
                 adaptor: new ej.WebApiAdaptor()
             });
 
@@ -101,7 +101,7 @@
                     columns: [
                         { field: "PurchaseOrderId", headerText: 'PO Id', isPrimaryKey: true, isIdentity: true, visible: false },
                         { field: "PurchaseOrderName", headerText: 'PO#', allowEditing: false },
-                        { field: "BranchId", headerText: 'Branch', foreignKeyField: "BranchId", foreignKeyValue: "BranchName", dataSource: dataManagerBranch, validationRules: { required: true } },
+                        { field: "BranchStoreId", headerText: 'Branch Store', foreignKeyField: "BranchStoreId", foreignKeyValue: "BranchStoreName", dataSource: dataManagerBranchStore, validationRules: { required: true } },
                         { field: "SupplierId", headerText: 'Supplier', foreignKeyField: "SupplierId", foreignKeyValue: "SupplierName", dataSource: dataManagerSupplier, validationRules: { required: true } },
                         { field: "OrderDate", headerText: 'Order Date', editType: "datepicker", format: "{0:MM/dd/yyyy}", validationRules: { required: true } },
                         { field: "DeliveryDate", headerText: 'Delivery Date', editType: "datepicker", format: "{0:MM/dd/yyyy}", validationRules: { required: true } },

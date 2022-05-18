@@ -17,6 +17,6 @@ namespace coderush.Models
         [Display(Name = "Supplier Bill / Invoice #")]
         public string SupplierInvoiceNumber { get; set; }
         [Display(Name = "BranchArea")]
-        public int BranchAreaId { get; set; }
+        public int BranchStoreId { get; set; }
     }
 }

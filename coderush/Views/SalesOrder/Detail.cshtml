@@ -167,14 +167,14 @@
         $(function () {
 
             var dataManager = ej.DataManager({
-                url: "/api/SalesOrderLine",
+                url: "/api/SalesOrderDetail",
                 adaptor: new ej.WebApiAdaptor(),
                 headers: [{ "SalesOrderId": @Model.SalesOrderId}],
                 offline: true
             });
 
-            var dataManagerProduct = ej.DataManager({
-                url: "/api/Product",
+            var dataManagerStock = ej.DataManager({
+                url: "/api/Stock",
                 adaptor: new ej.WebApiAdaptor()
             });
 
@@ -232,43 +232,42 @@
             });
 
             dataManager.ready.done(function (e) { 
-            $("#Grid").ejGrid({
-                dataSource: ej.DataManager({
-                    json: e.result,
-                    adaptor: new ej.remoteSaveAdaptor(),
-                    insertUrl: "/api/SalesOrderLine/Insert",
-                    updateUrl: "/api/SalesOrderLine/Update",
-                    removeUrl: "/api/SalesOrderLine/Remove",
-                }),
-                toolbarSettings: {
-                    showToolbar: true,
-                    toolbarItems: ["add", "edit", "delete", "update", "cancel"]
-                },
-                editSettings: {
-                    allowEditing: true,
-                    allowAdding: true,
-                    allowDeleting: true,
-                    showDeleteConfirmDialog: true,
-
-                },
-                allowPaging: true,
-                columns: [
-                    { field: "SalesOrderLineId", headerText: 'Line Id', isPrimaryKey: true, isIdentity: true, visible: false },
-                    { field: "SalesOrderId", headerText: 'SO#', defaultValue: @Model.SalesOrderId, foreignKeyField: "SalesOrderId", foreignKeyValue: "SalesOrderName", dataSource: dataManagerSalesOrder, visible: false },
-                    { field: "ProductId", headerText: 'Product', foreignKeyField: "ProductId", foreignKeyValue: "ProductName", dataSource: dataManagerProduct },
-                    { field: "Description", headerText: 'Description' },
-                    { field: "Quantity", headerText: 'Qty', defaultValue: 1, editType: "numericedit", format: "{0:n2}" },
-                    { field: "Price", headerText: 'Price', defaultValue: 0, editType: "numericedit", format: "{0:n2}" },
-                    { field: "Amount", headerText: 'Amount', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
-                    { field: "DiscountPercentage", headerText: 'Disc %', defaultValue: 0, editType: "numericedit", format: "{0:n2}" },
-                    { field: "DiscountAmount", headerText: 'Disc Amt', defaultValue: 0, visible: false, editType: "numericedit", format: "{0:n2}" },
-                    { field: "SubTotal", headerText: 'SubTotal', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
-                    { field: "TaxPercentage", headerText: 'Tax %', defaultValue: 0, editType: "numericedit", format: "{0:n2}" },
-                    { field: "TaxAmount", headerText: 'Tax Amt', defaultValue: 0, visible: false, editType: "numericedit", format: "{0:n2}" },
-                    { field: "Total", headerText: 'Total', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
-                ],
-                actionComplete: "complete",
-            });
+                $("#Grid").ejGrid({
+                    dataSource: ej.DataManager({
+                        json: e.result,
+                        adaptor: new ej.remoteSaveAdaptor(),
+                        insertUrl: "/api/SalesOrderDetail/Insert",
+                        updateUrl: "/api/SalesOrderDetail/Update",
+                        removeUrl: "/api/SalesOrderDetail/Remove",
+                    }),
+                    toolbarSettings: {
+                        showToolbar: true,
+                        toolbarItems: ["add", "edit", "delete", "update", "cancel"]
+                    },
+                    editSettings: {
+                        allowEditing: true,
+                        allowAdding: true,
+                        allowDeleting: true,
+                        showDeleteConfirmDialog: true,
+                    },
+                    allowPaging: true,
+                    columns: [
+                        { field: "SalesOrderDetailId", headerText: 'Id', isPrimaryKey: true, isIdentity: true, visible: false },
+                        { field: "SalesOrderId", headerText: 'SO#', defaultValue: @Model.SalesOrderId, foreignKeyField: "SalesOrderId", foreignKeyValue: "SalesOrderName", dataSource: dataManagerSalesOrder, visible: false },
+                        { field: "StockId", headerText: 'Item', foreignKeyField: "StockId", foreignKeyValue: "StockName", dataSource: dataManagerStock },
+                        { field: "Description", headerText: 'Description' , defaultValue: ""},
+                        { field: "Quantity", headerText: 'Qty', defaultValue: 1, editType: "numericedit", format: "{0:n2}" },
+                        { field: "Price", headerText: 'Unit Price', defaultValue: 0, editType: "numericedit", format: "{0:n2}", editParams: { decimalPlaces: 2 }},
+                        { field: "Amount", headerText: 'Amount', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
+                        { field: "DiscountPercentage", headerText: 'Disc %', defaultValue: 0, editType: "numericedit", format: "{0:n2}" },
+                        { field: "DiscountAmount", headerText: 'Disc Amt', defaultValue: 0, visible: false, editType: "numericedit", format: "{0:n2}" },
+                        { field: "SubTotal", headerText: 'SubTotal', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
+                        { field: "TaxPercentage", headerText: 'Tax %', defaultValue: 0, editType: "numericedit", format: "{0:n2}" },
+                        { field: "TaxAmount", headerText: 'Tax Amt', defaultValue: 0, visible: false, editType: "numericedit", format: "{0:n2}" },
+                        { field: "Total", headerText: 'Total', defaultValue: 0, allowEditing: false, editType: "numericedit", format: "{0:n2}" },
+                    ],
+                    actionComplete: "complete",
+                });
             });
 
 
